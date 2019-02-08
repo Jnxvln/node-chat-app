@@ -16,15 +16,16 @@ io.on('connection', (socket) => {
   console.log('A user connected!');
 
 /* SERVER EMITTERS =========================================  */
-  socket.emit('newMessage', {
-    from: 'Mr. Server',
-    message: 'This is my message to you',
-    createdAt: 12345
-  });
+
 
 /* SERVER LISTENERS =========================================  */
   socket.on('createMessage', (message) => {
     console.log(message);
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect', () => {
