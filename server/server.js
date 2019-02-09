@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
   /* SERVER EMITTERS =========================================  */
 
   socket.emit('newMessage', generateMessage('ADMIN', 'Welcome to the chat app!'));
-  socket.broadcast.emit('newMessage', generateMessage('ADMIN', 'A new user joined the app!'));
+  socket.broadcast.emit('newMessage', generateMessage('ADMIN', 'A user joined the chat =)'));
 
   /* SERVER LISTENERS =========================================  */
 
@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('A user disconnected');
+    socket.broadcast.emit('newMessage', generateMessage('ADMIN', 'A user has left the chat =('));
   });
 });
 
