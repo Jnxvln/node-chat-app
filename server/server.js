@@ -14,32 +14,28 @@ let io = socketIO(server);
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
+  
   console.log('A user connected!');
+  /* SERVER EMITTERS =========================================  */
 
-/* SERVER EMITTERS =========================================  */
+  socket.emit('newMessage', generateMessage('ADMIN', 'Welcome to the chat app!'));
+  socket.broadcast.emit('newMessage', generateMessage('ADMIN', 'A new user joined the app!'));
 
-// socket.emit from Admin text Welcome to Chat App
-// socket.broadcast.emit (sent to everyone but who joined)
-    // from Admin, text New user joined
+  /* SERVER LISTENERS =========================================  */
 
-socket.emit('newMessage', generateMessage('ADMIN', 'Welcome to the chat app!'));
-socket.broadcast.emit('newMessage', generateMessage('ADMIN', 'A new user joined the app!'));
+  socket.on('createMessage', (message, callback) => {
+      console.log(message);
+      io.emit('newMessage', generateMessage(message.from, message.text));
+      callback();
+  });
 
-/* SERVER LISTENERS =========================================  */
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', generateLocationMessage('ADMIN', coords.latitude, coords.longitude));
+  });
 
-socket.on('createMessage', (message, callback) => {
-    console.log(message);
-    io.emit('newMessage', generateMessage(message.from, message.text));
-    callback('This is from the server');
-});
-
-socket.on('createLocationMessage', (coords) => {
-  io.emit('newLocationMessage', generateLocationMessage('ADMIN', coords.latitude, coords.longitude));
-});
-
-socket.on('disconnect', () => {
-  console.log('A user disconnected');
-});
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
 });
 
 // ---------
