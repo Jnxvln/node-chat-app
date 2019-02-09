@@ -32,6 +32,7 @@ socket.broadcast.emit('newMessage', {
   text: 'A new user joined the channel!',
   createdAt: new Date().getTime()
 });
+
 /* SERVER LISTENERS =========================================  */
 
 
