@@ -17,15 +17,38 @@ io.on('connection', (socket) => {
 
 /* SERVER EMITTERS =========================================  */
 
+// socket.emit from Admin text Welcome to Chat App
+// socket.broadcast.emit (sent to everyone but who joined)
+    // from Admin, text New user joined
 
+socket.emit('newMessage', {
+  from: 'ADMIN',
+  text: 'Welcome to Chat App!',
+  createdAt: new Date().getTime()
+});
+
+socket.broadcast.emit('newMessage', {
+  from: 'ADMIN',
+  text: 'A new user joined the channel!',
+  createdAt: new Date().getTime()
+});
 /* SERVER LISTENERS =========================================  */
-  socket.on('createMessage', (message) => {
+
+
+
+socket.on('createMessage', (message) => {
     console.log(message);
     io.emit('newMessage', {
       from: message.from,
       text: message.text,
       createdAt: new Date().getTime()
     });
+
+    // socket.broadcast.emit('newMessage', {
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date().getTime()
+    // });
   });
 
   socket.on('disconnect', () => {
