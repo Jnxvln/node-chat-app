@@ -27,9 +27,10 @@ socket.broadcast.emit('newMessage', generateMessage('ADMIN', 'A new user joined 
 
 /* SERVER LISTENERS =========================================  */
 
-socket.on('createMessage', (message) => {
+socket.on('createMessage', (message, callback) => {
     console.log(message);
     io.emit('newMessage', generateMessage(message.from, message.text));
+    callback('This is from the server');
   });
 
   socket.on('disconnect', () => {
@@ -37,6 +38,7 @@ socket.on('createMessage', (message) => {
   });
 });
 
+// ---------
 server.listen(PORT, () => {
   console.log(`-- CHAP APP SERVER STARTED ON PORT ${PORT}`);
 });
